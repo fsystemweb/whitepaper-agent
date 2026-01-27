@@ -86,30 +86,8 @@ export function ChatInput({ onSend, isLoading, disabled, initialValue = '' }: Ch
 
             {/* Bottom bar */}
             <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-3 pb-3">
-                {/* Left: Attachment buttons */}
+                {/* Left: Placeholder for future buttons */}
                 <div className="flex items-center gap-1">
-                    <button
-                        type="button"
-                        className={cn(
-                            'p-2 rounded-lg text-muted-foreground',
-                            'hover:text-foreground hover:bg-muted',
-                            'transition-colors cursor-pointer'
-                        )}
-                        aria-label="Add attachment"
-                    >
-                        <Paperclip className="h-4 w-4" />
-                    </button>
-                    <button
-                        type="button"
-                        className={cn(
-                            'p-2 rounded-lg text-muted-foreground',
-                            'hover:text-foreground hover:bg-muted',
-                            'transition-colors cursor-pointer'
-                        )}
-                        aria-label="Add image"
-                    >
-                        <Image className="h-4 w-4" />
-                    </button>
                 </div>
 
                 {/* Right: Model selector, counter, send */}

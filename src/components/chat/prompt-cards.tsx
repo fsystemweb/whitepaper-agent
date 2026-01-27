@@ -22,31 +22,31 @@ interface PromptCard {
 const defaultPrompts: PromptCard[] = [
     {
         id: 'todo',
-        title: 'Write a to-do list for a',
-        subtitle: 'personal project or task',
+        title: 'I’m new to this topic — recommend a whitepaper',
+        subtitle: 'For personal learning or a specific task',
         icon: <FileText className="h-5 w-5 text-primary" />,
-        prompt: 'Write a to-do list for a personal project I want to complete this week',
+        prompt: 'I’m new to this topic — recommend a whitepaper',
     },
     {
         id: 'email',
-        title: 'Generate an email reply',
-        subtitle: 'to a job offer',
+        title: 'Help me find the right whitepaper',
+        subtitle: 'For a professional requirement',
         icon: <Mail className="h-5 w-5 text-primary" />,
-        prompt: 'Help me write a professional email reply to accept a job offer',
+        prompt: 'Help me find the right whitepaper',
     },
     {
         id: 'summarize',
-        title: 'Summarize this article or',
-        subtitle: 'text for me in one paragraph',
+        title: 'Show me relevant whitepapers about ',
+        subtitle: 'I’ll describe what I’m looking for in my own words',
         icon: <FileSearch className="h-5 w-5 text-primary" />,
-        prompt: 'Summarize the following text for me in one clear paragraph:',
+        prompt: 'Show me relevant whitepapers about ',
     },
     {
         id: 'technical',
-        title: 'How does AI work in a',
-        subtitle: 'technical capacity',
+        title: 'Recommend something based on my role',
+        subtitle: 'Tailored to my responsibilities and expertise',
         icon: <Cpu className="h-5 w-5 text-primary" />,
-        prompt: 'Explain how AI works from a technical perspective, including neural networks and machine learning',
+        prompt: 'Recommend something based on my role',
     },
 ];
 
@@ -85,19 +85,6 @@ export function PromptCards({ onSelectPrompt }: PromptCardsProps) {
                     </button>
                 ))}
             </div>
-
-            {/* Refresh button */}
-            <button
-                className={cn(
-                    'flex items-center gap-2 mx-auto px-3 py-1.5',
-                    'text-sm text-muted-foreground',
-                    'hover:text-foreground transition-colors',
-                    'cursor-pointer'
-                )}
-            >
-                <RefreshCw className="h-4 w-4" />
-                Refresh Prompts
-            </button>
         </div>
     );
 }

@@ -7,7 +7,7 @@
  * Based on reference design.
  */
 
-import { Plus, Clock, Compass, Bookmark, Settings, LogOut } from 'lucide-react';
+import { Plus, Clock, Compass, Bookmark, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -39,23 +39,16 @@ export function Sidebar({ className }: SidebarProps) {
             {/* Navigation */}
             <nav className="flex flex-col gap-1">
                 <IconButton icon={<Clock className="h-5 w-5" />} label="History" />
-                <IconButton icon={<Compass className="h-5 w-5" />} label="Explore" />
-                <IconButton icon={<Bookmark className="h-5 w-5" />} label="Saved" />
             </nav>
 
             {/* Spacer */}
             <div className="flex-1" />
 
-            {/* Bottom section */}
-            <div className="flex flex-col gap-1 mb-2">
-                <IconButton icon={<Settings className="h-5 w-5" />} label="Settings" />
-            </div>
-
             {/* User avatar */}
-            <Avatar className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all">
-                <AvatarImage src="" alt="User" />
+            <Avatar className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all" title="Guest">
+                <AvatarImage src="" alt="Guest" />
                 <AvatarFallback className="bg-gradient-to-br from-violet-500 to-purple-600 text-white text-xs">
-                    U
+                    G
                 </AvatarFallback>
             </Avatar>
         </aside>
