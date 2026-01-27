@@ -1,26 +1,35 @@
 'use client';
 
 /**
- * ChatInput - Message input with send button
+ * ChatInput - Modern message input with attachments
  * 
- * Uses shadcn/ui Input and Button components.
- * Follows loading-buttons UX pattern.
+ * Redesigned to match reference with floating card,
+ * attachment buttons, and character counter.
  */
 
-import { useState, useCallback, type KeyboardEvent, type FormEvent } from 'react';
+import { useState, useCallback, useEffect, type KeyboardEvent, type FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, Paperclip, Image, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ChatInputProps {
     onSend: (message: string) => Promise<void>;
     isLoading: boolean;
     disabled?: boolean;
+    initialValue?: string;
 }
 
-export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
-    const [input, setInput] = useState('');
+const MAX_CHARS = 1000;
+
+export function ChatInput({ onSend, isLoading, disabled, initialValue = '' }: ChatInputProps) {
+    const [input, setInput] = useState(initialValue);
+
+    // Sync with initialValue (for prompt card selection)
+    useEffect(() => {
+        if (initialValue) {
+            setInput(initialValue);
+        }
+    }, [initialValue]);
 
     const handleSubmit = useCallback(async (e?: FormEvent) => {
         e?.preventDefault();
@@ -33,8 +42,8 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
         await onSend(message);
     }, [input, isLoading, disabled, onSend]);
 
-    const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
-        // Submit on Enter (without Shift for newline in future textarea)
+    const handleKeyDown = useCallback((e: KeyboardEvent<HTMLTextAreaElement>) => {
+        // Submit on Enter (without Shift for newline)
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSubmit();
@@ -42,39 +51,111 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
     }, [handleSubmit]);
 
     const isDisabled = isLoading || disabled;
+    const charCount = input.length;
 
     return (
         <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 p-4 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+            className={cn(
+                'relative rounded-2xl border border-border bg-card shadow-lg',
+                'transition-shadow hover:shadow-xl focus-within:shadow-xl',
+                'focus-within:border-primary/30'
+            )}
         >
-            <Input
+            {/* Text input */}
+            <textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
                 onKeyDown={handleKeyDown}
-                placeholder={isLoading ? 'AI is responding...' : 'Type your message...'}
+                placeholder={isLoading ? 'AI is responding...' : 'Ask whatever you want...'}
                 disabled={isDisabled}
+                rows={1}
                 className={cn(
-                    'flex-1 h-11',
-                    isDisabled && 'opacity-50'
+                    'w-full resize-none bg-transparent px-4 pt-4 pb-12',
+                    'text-sm placeholder:text-muted-foreground',
+                    'focus:outline-none',
+                    'min-h-[52px] max-h-[200px]',
+                    isDisabled && 'opacity-50 cursor-not-allowed'
                 )}
-                autoComplete="off"
+                style={{
+                    height: 'auto',
+                    minHeight: '52px',
+                }}
                 aria-label="Chat message input"
             />
 
-            <Button
-                type="submit"
-                size="icon"
-                disabled={isDisabled || !input.trim()}
-                className="h-11 w-11 shrink-0"
-                aria-label="Send message"
-            >
-                {isLoading ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                    <Send className="h-5 w-5" />
-                )}
-            </Button>
+            {/* Bottom bar */}
+            <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-3 pb-3">
+                {/* Left: Attachment buttons */}
+                <div className="flex items-center gap-1">
+                    <button
+                        type="button"
+                        className={cn(
+                            'p-2 rounded-lg text-muted-foreground',
+                            'hover:text-foreground hover:bg-muted',
+                            'transition-colors cursor-pointer'
+                        )}
+                        aria-label="Add attachment"
+                    >
+                        <Paperclip className="h-4 w-4" />
+                    </button>
+                    <button
+                        type="button"
+                        className={cn(
+                            'p-2 rounded-lg text-muted-foreground',
+                            'hover:text-foreground hover:bg-muted',
+                            'transition-colors cursor-pointer'
+                        )}
+                        aria-label="Add image"
+                    >
+                        <Image className="h-4 w-4" />
+                    </button>
+                </div>
+
+                {/* Right: Model selector, counter, send */}
+                <div className="flex items-center gap-2">
+                    {/* AI Model selector */}
+                    <button
+                        type="button"
+                        className={cn(
+                            'hidden sm:flex items-center gap-1 px-2 py-1 rounded-lg',
+                            'text-xs text-muted-foreground',
+                            'hover:text-foreground hover:bg-muted',
+                            'transition-colors cursor-pointer'
+                        )}
+                    >
+                        AI Web
+                        <ChevronDown className="h-3 w-3" />
+                    </button>
+
+                    {/* Character counter */}
+                    <span className={cn(
+                        'text-xs tabular-nums',
+                        charCount >= MAX_CHARS ? 'text-destructive' : 'text-muted-foreground'
+                    )}>
+                        {charCount}/{MAX_CHARS}
+                    </span>
+
+                    {/* Send button */}
+                    <Button
+                        type="submit"
+                        size="icon"
+                        disabled={isDisabled || !input.trim()}
+                        className={cn(
+                            'h-8 w-8 rounded-full shrink-0',
+                            'bg-primary hover:bg-primary/90',
+                            'disabled:opacity-50'
+                        )}
+                        aria-label="Send message"
+                    >
+                        {isLoading ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <Send className="h-4 w-4" />
+                        )}
+                    </Button>
+                </div>
+            </div>
         </form>
     );
 }

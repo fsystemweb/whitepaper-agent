@@ -3,16 +3,17 @@
 /**
  * ChatContainer - Main chat interface
  * 
- * Integrates useChat hook with UI components.
- * Uses shadcn/ui Card component.
+ * Redesigned to match modern minimalist reference.
+ * Full-page layout with welcome screen and centered input.
  */
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { useState, useCallback } from 'react';
 import { MessageList } from './message-list';
 import { ChatInput } from './chat-input';
+import { WelcomeScreen } from './welcome-screen';
+import { Sidebar } from './sidebar';
 import { useChat } from '@/hooks/use-chat';
-import { Trash2, AlertCircle, Bot } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 interface ChatContainerProps {
     systemPromptKey?: 'default' | 'technical' | 'creative';
@@ -22,40 +23,26 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
     const { messages, isLoading, error, sendMessage, clearMessages } = useChat({
         systemPromptKey,
     });
+    const [pendingPrompt, setPendingPrompt] = useState('');
+
+    const handleSelectPrompt = useCallback((prompt: string) => {
+        setPendingPrompt(prompt);
+    }, []);
+
+    const handleSendMessage = useCallback(async (message: string) => {
+        setPendingPrompt(''); // Clear pending prompt after sending
+        await sendMessage(message);
+    }, [sendMessage]);
+
+    const hasMessages = messages.length > 0;
 
     return (
-        <Card className="w-full max-w-3xl mx-auto h-[calc(100vh-4rem)] flex flex-col shadow-xl">
-            {/* Header */}
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b shrink-0">
-                <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Bot className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                        <CardTitle className="text-lg">AI Assistant</CardTitle>
-                        <p className="text-sm text-muted-foreground">
-                            {systemPromptKey === 'technical' && 'Technical Expert'}
-                            {systemPromptKey === 'creative' && 'Creative Writer'}
-                            {systemPromptKey === 'default' && 'General Assistant'}
-                        </p>
-                    </div>
-                </div>
+        <div className="flex h-screen">
+            {/* Sidebar */}
+            <Sidebar />
 
-                {messages.length > 0 && (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearMessages}
-                        className="text-muted-foreground hover:text-destructive"
-                    >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Clear
-                    </Button>
-                )}
-            </CardHeader>
-
-            {/* Messages */}
-            <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+            {/* Main content */}
+            <div className="flex-1 flex flex-col md:ml-14">
                 {/* Error message */}
                 {error && (
                     <div className="mx-4 mt-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm flex items-center gap-2">
@@ -64,15 +51,31 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
                     </div>
                 )}
 
-                {/* Message list */}
-                <MessageList messages={messages} isLoading={isLoading} />
+                {/* Content area */}
+                {hasMessages ? (
+                    <MessageList
+                        messages={messages}
+                        isLoading={isLoading}
+                        onClear={clearMessages}
+                    />
+                ) : (
+                    <WelcomeScreen
+                        userName="there"
+                        onSelectPrompt={handleSelectPrompt}
+                    />
+                )}
 
-                {/* Input */}
-                <ChatInput
-                    onSend={sendMessage}
-                    isLoading={isLoading}
-                />
-            </CardContent>
-        </Card>
+                {/* Input - always at bottom */}
+                <div className="px-4 pb-6 pt-2">
+                    <div className="max-w-3xl mx-auto">
+                        <ChatInput
+                            onSend={handleSendMessage}
+                            isLoading={isLoading}
+                            initialValue={pendingPrompt}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

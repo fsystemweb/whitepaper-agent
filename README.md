@@ -13,7 +13,6 @@ A production-ready chatbot application built with Next.js 14, shadcn/ui, and Lan
 - 🎨 **shadcn/ui** components for a polished, accessible UI
 - 🤖 **LangChain** integration with ChatGPT API
 - 📝 **Decoupled prompts** - update prompts without touching code
-- 🌙 **Dark mode** by default
 - ⌨️ **Full keyboard navigation** support
 - 📱 **Responsive design** for all screen sizes
 
