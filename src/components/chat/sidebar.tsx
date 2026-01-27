@@ -26,7 +26,7 @@ export function Sidebar({
 }: SidebarProps) {
     return (
         <aside className={cn(
-            'fixed left-0 top-0 bottom-0 w-14 flex flex-col items-center py-4',
+            'fixed left-0 top-0 bottom-0 w-14 flex flex-col items-center py-4 z-50',
             'bg-background border-r border-border',
             'hidden md:flex',
             className

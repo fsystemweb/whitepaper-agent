@@ -52,14 +52,15 @@ export function ChatHistory({
             {/* Panel */}
             <div
                 className={cn(
-                    'fixed top-0 bottom-0 w-72 bg-background border-r border-border z-40',
+                    'fixed top-0 bottom-0 w-72 bg-background border-r border-border z-30',
                     'transition-all duration-300 ease-in-out',
                     'flex flex-col',
-                    // Mobile: starts at left-0, slides to -100% when closed
-                    // Desktop: starts at left-14 (56px), needs to slide left by full width + 14
+                    // Mobile: slides from left edge
+                    // Desktop: always positioned at left-14, slides in/out from under sidebar
+                    'md:left-14',
                     isOpen
-                        ? 'left-0 md:left-14'
-                        : '-left-72'
+                        ? 'left-0 translate-x-0'
+                        : '-left-72 md:left-14 md:-translate-x-72'
                 )}
             >
                 {/* Header */}
