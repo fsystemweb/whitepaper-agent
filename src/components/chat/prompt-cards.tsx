@@ -28,14 +28,14 @@ const defaultPrompts: PromptCard[] = [
         prompt: 'I’m new to this topic — recommend a whitepaper',
     },
     {
-        id: 'email',
+        id: 'summarize',
         title: 'Help me find the right whitepaper',
         subtitle: 'For a professional requirement',
         icon: <Mail className="h-5 w-5 text-primary" />,
         prompt: 'Help me find the right whitepaper',
     },
     {
-        id: 'summarize',
+        id: 'search',
         title: 'Show me relevant whitepapers about ',
         subtitle: 'I’ll describe what I’m looking for in my own words',
         icon: <FileSearch className="h-5 w-5 text-primary" />,

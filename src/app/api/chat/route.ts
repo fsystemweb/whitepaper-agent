@@ -55,14 +55,17 @@ export async function POST(request: NextRequest) {
         const stream = new ReadableStream({
             async start(controller) {
                 try {
-                    const chatStream = streamChatResponse(
+                    // Get the complete response (streamChatResponse now returns Promise<string>)
+                    const response = await streamChatResponse(
                         messages as ChatMessage[],
                         userMessage,
                         systemPromptKey
                     );
 
-                    for await (const chunk of chatStream) {
-                        // Send chunk as Server-Sent Event
+                    // Stream the response in chunks for better UX
+                    const chunkSize = 20; // characters per chunk
+                    for (let i = 0; i < response.length; i += chunkSize) {
+                        const chunk = response.slice(i, i + chunkSize);
                         const data = JSON.stringify({ content: chunk });
                         controller.enqueue(encoder.encode(`data: ${data}\n\n`));
                     }
