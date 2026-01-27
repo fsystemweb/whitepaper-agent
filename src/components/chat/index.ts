@@ -10,4 +10,5 @@ export { TypingIndicator } from './typing-indicator';
 export { Sidebar } from './sidebar';
 export { WelcomeScreen } from './welcome-screen';
 export { PromptCards } from './prompt-cards';
+export { ChatHistory } from './chat-history';
 

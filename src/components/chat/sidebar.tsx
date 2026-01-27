@@ -4,18 +4,26 @@
  * Sidebar - Minimal icon navigation
  * 
  * Left sidebar with icon buttons for navigation.
- * Based on reference design.
+ * Includes history panel toggle and new chat button.
  */
 
-import { Plus, Clock, Compass, Bookmark, LogOut } from 'lucide-react';
+import { Plus, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface SidebarProps {
     className?: string;
+    isHistoryOpen?: boolean;
+    onToggleHistory?: () => void;
+    onNewChat?: () => void;
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({
+    className,
+    isHistoryOpen = false,
+    onToggleHistory,
+    onNewChat,
+}: SidebarProps) {
     return (
         <aside className={cn(
             'fixed left-0 top-0 bottom-0 w-14 flex flex-col items-center py-4',
@@ -31,14 +39,23 @@ export function Sidebar({ className }: SidebarProps) {
             </div>
 
             {/* New chat */}
-            <IconButton icon={<Plus className="h-5 w-5" />} label="New chat" />
+            <IconButton
+                icon={<Plus className="h-5 w-5" />}
+                label="New chat"
+                onClick={onNewChat}
+            />
 
             {/* Divider */}
             <div className="w-6 h-px bg-border my-3" />
 
             {/* Navigation */}
             <nav className="flex flex-col gap-1">
-                <IconButton icon={<Clock className="h-5 w-5" />} label="History" />
+                <IconButton
+                    icon={<Clock className="h-5 w-5" />}
+                    label="History"
+                    active={isHistoryOpen}
+                    onClick={onToggleHistory}
+                />
             </nav>
 
             {/* Spacer */}

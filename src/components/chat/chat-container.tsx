@@ -3,16 +3,18 @@
 /**
  * ChatContainer - Main chat interface
  * 
- * Redesigned to match modern minimalist reference.
- * Full-page layout with welcome screen and centered input.
+ * Full-page layout with welcome screen, chat history sidebar,
+ * and centered input. Persists chat sessions to localStorage.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { MessageList } from './message-list';
 import { ChatInput } from './chat-input';
 import { WelcomeScreen } from './welcome-screen';
 import { Sidebar } from './sidebar';
-import { useChat } from '@/hooks/use-chat';
+import { ChatHistory } from './chat-history';
+import { useChat, type Message } from '@/hooks/use-chat';
+import { useChatHistory } from '@/hooks/use-chat-history';
 import { AlertCircle } from 'lucide-react';
 
 interface ChatContainerProps {
@@ -20,10 +22,27 @@ interface ChatContainerProps {
 }
 
 export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProps) {
-    const { messages, isLoading, error, sendMessage, clearMessages } = useChat({
+    const { messages, isLoading, error, sendMessage, clearMessages, setMessages } = useChat({
         systemPromptKey,
     });
+    const {
+        sessions,
+        activeSessionId,
+        saveSession,
+        loadSession,
+        deleteSession,
+        createNewSession,
+    } = useChatHistory();
+
     const [pendingPrompt, setPendingPrompt] = useState('');
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
+    // Save session after each message exchange (when not loading)
+    useEffect(() => {
+        if (!isLoading && messages.length > 0) {
+            saveSession(messages);
+        }
+    }, [messages, isLoading, saveSession]);
 
     const handleSelectPrompt = useCallback((prompt: string) => {
         setPendingPrompt(prompt);
@@ -34,12 +53,52 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
         await sendMessage(message);
     }, [sendMessage]);
 
+    const handleToggleHistory = useCallback(() => {
+        setIsHistoryOpen((prev) => !prev);
+    }, []);
+
+    const handleNewChat = useCallback(() => {
+        clearMessages();
+        createNewSession();
+        setIsHistoryOpen(false);
+    }, [clearMessages, createNewSession]);
+
+    const handleSelectSession = useCallback((sessionId: string) => {
+        const sessionMessages = loadSession(sessionId);
+        if (sessionMessages) {
+            setMessages(sessionMessages);
+        }
+        setIsHistoryOpen(false);
+    }, [loadSession, setMessages]);
+
+    const handleDeleteSession = useCallback((sessionId: string) => {
+        deleteSession(sessionId);
+        // If we deleted the active session, clear messages
+        if (sessionId === activeSessionId) {
+            clearMessages();
+        }
+    }, [deleteSession, activeSessionId, clearMessages]);
+
     const hasMessages = messages.length > 0;
 
     return (
         <div className="flex h-screen">
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar
+                isHistoryOpen={isHistoryOpen}
+                onToggleHistory={handleToggleHistory}
+                onNewChat={handleNewChat}
+            />
+
+            {/* History panel */}
+            <ChatHistory
+                isOpen={isHistoryOpen}
+                onClose={() => setIsHistoryOpen(false)}
+                sessions={sessions}
+                activeSessionId={activeSessionId}
+                onSelectSession={handleSelectSession}
+                onDeleteSession={handleDeleteSession}
+            />
 
             {/* Main content */}
             <div className="flex-1 flex flex-col md:ml-14">
@@ -56,7 +115,7 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
                     <MessageList
                         messages={messages}
                         isLoading={isLoading}
-                        onClear={clearMessages}
+                        onClear={handleNewChat}
                     />
                 ) : (
                     <WelcomeScreen

@@ -26,6 +26,7 @@ interface UseChatReturn {
     error: string | null;
     sendMessage: (content: string) => Promise<void>;
     clearMessages: () => void;
+    setMessages: (messages: Message[]) => void;
 }
 
 /**
@@ -185,5 +186,6 @@ export function useChat(options: UseChatOptions = {}): UseChatReturn {
         error,
         sendMessage,
         clearMessages,
+        setMessages,
     };
 }
