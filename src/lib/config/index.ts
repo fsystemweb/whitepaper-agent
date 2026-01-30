@@ -10,6 +10,9 @@ export const config = {
         temperature: parseFloat(process.env.OPENAI_TEMPERATURE || '0.2'),
         maxTokens: parseInt(process.env.OPENAI_MAX_TOKENS || '2048', 10),
     },
+    features: {
+        enableRelevanceCheck: process.env.ENABLE_RELEVANCE_CHECK === 'true',
+    },
 } as const;
 
 /**
