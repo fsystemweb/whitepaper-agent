@@ -22,10 +22,10 @@ interface PromptCard {
 const defaultPrompts: PromptCard[] = [
     {
         id: 'todo',
-        title: 'I’m new to this topic — recommend a whitepaper',
+        title: 'I’m new to this topic recommend a whitepaper about',
         subtitle: 'For personal learning or a specific task',
         icon: <FileText className="h-5 w-5 text-primary" />,
-        prompt: 'I’m new to this topic — recommend a whitepaper',
+        prompt: 'I’m new to this topic recommend a whitepaper about',
     },
     {
         id: 'summarize',
