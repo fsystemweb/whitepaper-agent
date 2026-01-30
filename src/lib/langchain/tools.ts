@@ -15,7 +15,10 @@ export const arxivTool = tool(
         return JSON.stringify(
             docs.map((doc) => ({
                 title: doc.metadata.title,
+                authors: doc.metadata.authors,
+                published: doc.metadata.published,
                 summary: doc.pageContent,
+                link: doc.metadata.id, // The ID in ArxivRetriever is the URL
             })),
             null,
             2

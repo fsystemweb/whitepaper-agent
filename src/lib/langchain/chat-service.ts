@@ -5,7 +5,7 @@
  * Uses simple async/await pattern.
  */
 
-import { HumanMessage, AIMessage, SystemMessage, ToolMessage, type BaseMessage } from '@langchain/core/messages';
+import { HumanMessage, AIMessage, SystemMessage, ToolMessage, type BaseMessage, AIMessageChunk } from '@langchain/core/messages';
 import { getChatModel } from './client';
 import { createChatPromptTemplate, type SystemPromptKey } from '@/lib/prompts';
 import type { ChatMessage } from './types';
@@ -34,13 +34,13 @@ function convertToLangChainMessages(messages: ChatMessage[]): BaseMessage[] {
 
 /**
  * Generate a chat response with Tool Support
- * Returns the complete response as a string
+ * Returns an async generator that yields response chunks
  */
-export async function streamChatResponse(
+export async function* streamChatResponse(
     messages: ChatMessage[],
     userMessage: string,
     systemPromptKey: SystemPromptKey = 'default'
-): Promise<string> {
+): AsyncGenerator<string, void, unknown> {
     const chatModel = getChatModel();
     const modelWithTools = chatModel.bindTools(tools);
     const promptTemplate = createChatPromptTemplate(systemPromptKey);
@@ -56,37 +56,60 @@ export async function streamChatResponse(
         input: userMessage,
     });
 
-    // Initial pass: Check if the model wants to call a tool
-    const initialResponse = await modelWithTools.invoke(formattedPrompt);
+    // Initial pass: Stream the response to check for tool calls
+    // We need to aggregate the chunks to check for tool calls, 
+    // but also yield them if it's just text.
+    // However, LangChain's stream events are cleaner for this.
+    // For simplicity with bindTools, we can stream and check the final aggregated chunk for tool_calls,
+    // OR we can just `invoke` first (non-streaming) to check for tools, then stream the final answer.
+    // BUT, to be "fast", we ideally stream the first part too. 
+    // If the model decides to call a tool, it usually outputs valid JSON args.
+    // Let's stick to a robust approach:
+    // 1. Stream the first response.
+    // 2. Aggregate it to check for tool calls.
+    // 3. If tool call, execute and stream the second response.
+
+    const stream = await modelWithTools.stream(formattedPrompt);
+    let gathered: AIMessageChunk | null = null;
+
+    for await (const chunk of stream) {
+        // If we have tool calls, we might not want to show the raw JSON generation to the user.
+        // But if it's text, we want to yield it.
+        // Usually, if there are tool calls, content is empty or "I will check...".
+        if (chunk.content) {
+            yield typeof chunk.content === 'string' ? chunk.content : JSON.stringify(chunk.content);
+        }
+        const aiChunk = chunk as AIMessageChunk;
+        gathered = gathered ? (gathered.concat(aiChunk)) : aiChunk;
+    }
 
     // Check if model requested a tool
-    if (initialResponse.tool_calls && initialResponse.tool_calls.length > 0) {
-        const toolCall = initialResponse.tool_calls[0];
+    if (gathered && gathered.tool_calls && gathered.tool_calls.length > 0) {
+        const toolCall = gathered.tool_calls[0];
 
         // Execute the tool
+        // We can yield a status update here if we want, but for now let's keep it text-only
         const toolResult = await arxivTool.invoke(toolCall.args as { query: string });
 
         // Create updated conversation with tool result
         const nextMessages = [
             ...(Array.isArray(formattedPrompt) ? formattedPrompt : [new HumanMessage(userMessage)]),
-            initialResponse,
+            gathered,
             new ToolMessage({
                 tool_call_id: toolCall.id!,
                 content: typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult),
-            })
+            }),
+            new SystemMessage("Strictly use the links provided in the tool output. Do not change them.")
         ];
 
         // Get final answer with tool context
-        const finalResponse = await modelWithTools.invoke(nextMessages);
-        return typeof finalResponse.content === 'string'
-            ? finalResponse.content
-            : JSON.stringify(finalResponse.content);
+        const finalStream = await modelWithTools.stream(nextMessages);
+        for await (const chunk of finalStream) {
+            if (chunk.content) {
+                yield typeof chunk.content === 'string' ? chunk.content : JSON.stringify(chunk.content);
+            }
+        }
     }
-
-    // No tool needed - return initial response
-    return typeof initialResponse.content === 'string'
-        ? initialResponse.content
-        : JSON.stringify(initialResponse.content);
 }
 
 /**

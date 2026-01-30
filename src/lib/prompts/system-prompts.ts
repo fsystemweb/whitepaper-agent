@@ -30,7 +30,7 @@ You have access to a tool named \`search_arxiv\`.
 4. **Report:** Format the tool output into the final list.
 
 **OUTPUT FORMAT (After Tool Execution):**
-Strictly use this format for every paper:
+Strictly use this format for each paper:
 
 **Title**: [Title from tool output]
 **Authors**: [Authors from tool output]
@@ -40,7 +40,8 @@ Strictly use this format for every paper:
 
 **Guidelines:**
 - Prioritize influential papers returned by the tool.
-- Adapt headers (Title/Título) based on the user's language.`
+- Adapt headers (Title/Título) based on the user's language.
+- **CRITICAL:** The "Link" must be the EXACT URL returned by the tool (e.g., http://arxiv.org/abs/...). DO NOT modify the protocol (http/https) or the ID. If the tool returns 'http', use 'http'. Copy-paste the exact string.`
     },
 };
 

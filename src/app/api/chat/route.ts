@@ -55,17 +55,15 @@ export async function POST(request: NextRequest) {
         const stream = new ReadableStream({
             async start(controller) {
                 try {
-                    // Get the complete response (streamChatResponse now returns Promise<string>)
-                    const response = await streamChatResponse(
+                    // Get the stream generator
+                    const streamGen = streamChatResponse(
                         messages as ChatMessage[],
                         userMessage,
                         systemPromptKey
                     );
 
-                    // Stream the response in chunks for better UX
-                    const chunkSize = 20; // characters per chunk
-                    for (let i = 0; i < response.length; i += chunkSize) {
-                        const chunk = response.slice(i, i + chunkSize);
+                    // Iterate over the generator and stream chunks
+                    for await (const chunk of streamGen) {
                         const data = JSON.stringify({ content: chunk });
                         controller.enqueue(encoder.encode(`data: ${data}\n\n`));
                     }
