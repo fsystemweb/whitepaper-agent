@@ -8,20 +8,18 @@
 
 import { useEffect, useRef } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
 import { MessageBubble } from './message-bubble';
 import { TypingIndicator } from './typing-indicator';
-import { Trash2 } from 'lucide-react';
 import type { Message } from '@/hooks/use-chat';
 import { useTranslation } from 'react-i18next';
 
 interface MessageListProps {
     messages: Message[];
     isLoading: boolean;
-    onClear?: () => void;
+    onClear?: () => void; // Keeping optional to avoid breaking parent usage immediately, but functionality removed
 }
 
-export function MessageList({ messages, isLoading, onClear }: MessageListProps) {
+export function MessageList({ messages, isLoading }: MessageListProps) {
     const { t } = useTranslation('MessageList');
     const scrollRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -35,20 +33,6 @@ export function MessageList({ messages, isLoading, onClear }: MessageListProps) 
 
     return (
         <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Header with clear button */}
-            {onClear && messages.length > 0 && (
-                <div className="flex justify-end px-4 py-2 border-b border-border/50">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={onClear}
-                        className="text-muted-foreground hover:text-destructive cursor-pointer"
-                    >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        {t('clear')}
-                    </Button>
-                </div>
-            )}
 
             {/* Messages */}
             <ScrollArea className="flex-1 min-h-0" ref={containerRef}>

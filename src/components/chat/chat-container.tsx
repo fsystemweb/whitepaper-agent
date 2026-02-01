@@ -15,13 +15,17 @@ import { Sidebar } from './sidebar';
 import { ChatHistory } from './chat-history';
 import { useChat, type Message } from '@/hooks/use-chat';
 import { useChatHistory } from '@/hooks/use-chat-history';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Trash2 } from 'lucide-react';
+import { LanguageSelector } from './language-selector';
+import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 interface ChatContainerProps {
     systemPromptKey?: 'default' | 'technical' | 'creative';
 }
 
 export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProps) {
+    const { t } = useTranslation('MessageList');
     const { messages, isLoading, error, sendMessage, clearMessages, setMessages } = useChat({
         systemPromptKey,
     });
@@ -79,6 +83,17 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
         }
     }, [deleteSession, activeSessionId, clearMessages]);
 
+    const handleDeleteCurrentSession = useCallback(() => {
+        if (activeSessionId) {
+            deleteSession(activeSessionId);
+            clearMessages();
+            createNewSession();
+        } else {
+            clearMessages();
+        }
+        setIsHistoryOpen(false);
+    }, [activeSessionId, deleteSession, clearMessages, createNewSession]);
+
     const hasMessages = messages.length > 0;
 
     return (
@@ -100,11 +115,33 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
                 onDeleteSession={handleDeleteSession}
             />
 
+
+
             {/* Main content */}
-            <div className="flex-1 flex flex-col md:ml-14 overflow-hidden">
+            {/* Main content */}
+            <div className="flex-1 flex flex-col md:ml-14 overflow-hidden relative">
+                {/* Header */}
+                <header className="flex justify-end items-center p-4 absolute top-0 right-0 left-0 z-50 pointer-events-none gap-2">
+                    <div className="pointer-events-auto flex items-center gap-2">
+                        {hasMessages && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={handleDeleteCurrentSession}
+                                className="h-9 w-9 rounded-full bg-background/50 border border-border hover:bg-muted/50"
+                                title={t('clear')}
+                            >
+                                <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                <span className="sr-only">{t('clear')}</span>
+                            </Button>
+                        )}
+                        <LanguageSelector />
+                    </div>
+                </header>
+
                 {/* Error message */}
                 {error && (
-                    <div className="mx-4 mt-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm flex items-center gap-2">
+                    <div className="mx-4 mt-16 p-3 rounded-lg bg-destructive/10 text-destructive text-sm flex items-center gap-2">
                         <AlertCircle className="h-4 w-4 shrink-0" />
                         <span>{error}</span>
                     </div>
@@ -115,7 +152,6 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
                     <MessageList
                         messages={messages}
                         isLoading={isLoading}
-                        onClear={handleNewChat}
                     />
                 ) : (
                     <WelcomeScreen

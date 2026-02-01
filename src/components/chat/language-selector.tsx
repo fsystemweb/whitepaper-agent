@@ -18,10 +18,10 @@ export function LanguageSelector() {
     };
 
     return (
-        <div className="absolute top-4 right-4 z-50">
+        <div className="z-50">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-background/50 backdrop-blur-sm border border-border hover:bg-muted/50">
+                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-background/50 border border-border hover:bg-muted/50">
                         <Globe className="h-4 w-4 text-muted-foreground" />
                         <span className="sr-only">{t('language')}</span>
                     </Button>
