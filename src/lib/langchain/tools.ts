@@ -4,7 +4,17 @@ import { tool } from "@langchain/core/tools";
 import { getChatModel } from "./client";
 import { SystemMessage } from "@langchain/core/messages";
 import { config } from "@/lib/config";
+import { Document } from "@langchain/core/documents";
 
+const formatDocsToString = (docs: Document[]) => {
+    return docs.map((doc, i) => [
+        `**${i + 1}. Title:** ${doc.metadata.title}`,
+        `**Authors:** ${doc.metadata.authors}`,
+        `**Published:** ${doc.metadata.published}`,
+        `**Summary:** ${doc.pageContent}`,
+        `**Link:** [${doc.metadata.id}](${doc.metadata.id})`
+    ].join("  \n")).join("\n\n");
+};
 export const arxivTool = tool(
     async ({ query }: { query: string }) => {
         const retriever = new ArxivRetriever({
@@ -54,31 +64,12 @@ ONLY return the JSON.`;
             }
 
             const filteredDocs = docs.filter((_, i) => relevantIndices.includes(i));
-            return JSON.stringify(
-                filteredDocs.map((doc) => ({
-                    title: doc.metadata.title,
-                    authors: doc.metadata.authors,
-                    published: doc.metadata.published,
-                    summary: doc.pageContent,
-                    link: doc.metadata.id,
-                })),
-                null,
-                2
-            );
+
+            return formatDocsToString(filteredDocs);
         }
 
         console.log("arvix", docs);
-        return JSON.stringify(
-            docs.map((doc) => ({
-                title: doc.metadata.title,
-                authors: doc.metadata.authors,
-                published: doc.metadata.published,
-                summary: doc.pageContent,
-                link: doc.metadata.id, // The ID in ArxivRetriever is the URL
-            })),
-            null,
-            2
-        );
+        return formatDocsToString(docs);
     },
     {
         name: "search_arxiv",

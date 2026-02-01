@@ -10,6 +10,7 @@ import { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { User, Bot } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 interface MessageBubbleProps {
     role: 'user' | 'assistant' | 'system';
@@ -17,65 +18,7 @@ interface MessageBubbleProps {
     isStreaming?: boolean;
 }
 
-/**
- * Simple markdown-like text rendering
- * Handles code blocks and basic formatting
- */
-function renderContent(content: string): React.ReactNode {
-    if (!content) {
-        return null;
-    }
 
-    // Split by code blocks
-    const parts = content.split(/(```[\s\S]*?```)/g);
-
-    return parts.map((part, index) => {
-        // Code block
-        if (part.startsWith('```') && part.endsWith('```')) {
-            const codeContent = part.slice(3, -3);
-            const firstNewline = codeContent.indexOf('\n');
-            const language = firstNewline > 0 ? codeContent.slice(0, firstNewline).trim() : '';
-            const code = firstNewline > 0 ? codeContent.slice(firstNewline + 1) : codeContent;
-
-            return (
-                <pre
-                    key={index}
-                    className="mt-2 mb-2 p-3 rounded-lg bg-muted/50 overflow-x-auto text-sm font-mono"
-                >
-                    {language && (
-                        <div className="text-xs text-muted-foreground mb-2">{language}</div>
-                    )}
-                    <code>{code}</code>
-                </pre>
-            );
-        }
-
-        // Regular text - handle inline code and bold
-        const segments = part.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
-        return (
-            <span key={index}>
-                {segments.map((segment, segIndex) => {
-                    // Inline code
-                    if (segment.startsWith('`') && segment.endsWith('`')) {
-                        return (
-                            <code
-                                key={segIndex}
-                                className="px-1.5 py-0.5 rounded bg-muted text-sm font-mono"
-                            >
-                                {segment.slice(1, -1)}
-                            </code>
-                        );
-                    }
-                    // Bold text
-                    if (segment.startsWith('**') && segment.endsWith('**')) {
-                        return <strong key={segIndex}>{segment.slice(2, -2)}</strong>;
-                    }
-                    return segment;
-                })}
-            </span>
-        );
-    });
-}
 
 function MessageBubbleComponent({ role, content, isStreaming }: MessageBubbleProps) {
     const isUser = role === 'user';
@@ -110,8 +53,49 @@ function MessageBubbleComponent({ role, content, isStreaming }: MessageBubblePro
                     isStreaming && !content && 'min-w-[60px]'
                 )}
             >
-                <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
-                    {renderContent(content)}
+                <div className="text-sm leading-normal break-words">
+                    <div className="markdown-content">
+                        <ReactMarkdown
+                            components={{
+                                a: ({ ...props }) => (
+                                    <a
+                                        {...props}
+                                        className="text-blue-500 hover:underline"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    />
+                                ),
+                                p: ({ ...props }) => <p {...props} className="mb-2 last:mb-0" />,
+                                ul: ({ ...props }) => <ul {...props} className="list-disc pl-4 mb-2" />,
+                                ol: ({ ...props }) => <ol {...props} className="list-decimal pl-4 mb-2" />,
+                                li: ({ ...props }) => <li {...props} className="mb-1" />,
+                                code: ({ className, children, ...props }) => {
+                                    const match = /language-(\w+)/.exec(className || '');
+                                    const isInline = !match && !className;
+                                    return isInline ? (
+                                        <code
+                                            {...props}
+                                            className="px-1.5 py-0.5 rounded bg-muted text-sm font-mono"
+                                        >
+                                            {children}
+                                        </code>
+                                    ) : (
+                                        <code {...props} className={className}>
+                                            {children}
+                                        </code>
+                                    );
+                                },
+                                pre: ({ ...props }) => (
+                                    <pre
+                                        {...props}
+                                        className="mt-2 mb-2 p-3 rounded-lg bg-muted/50 overflow-x-auto text-sm font-mono"
+                                    />
+                                ),
+                            }}
+                        >
+                            {content}
+                        </ReactMarkdown>
+                    </div>
                     {isStreaming && !content && (
                         <span className="inline-block w-2 h-4 bg-current animate-pulse" />
                     )}
