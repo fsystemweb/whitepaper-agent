@@ -155,7 +155,6 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
                     />
                 ) : (
                     <WelcomeScreen
-                        userName="there"
                         onSelectPrompt={handleSelectPrompt}
                     />
                 )}
