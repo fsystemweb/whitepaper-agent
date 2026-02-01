@@ -29,20 +29,20 @@ Aquí tienes un mapa de cómo viaja tu pregunta:
 
 ```mermaid
 graph TD
-    User(👤 Tú) -->|Escribes pregunta| Frontend[🖥️ Interfaz (Next.js)]
-    Frontend -->|Envía mensaje| Brain[🧠 El Cerebro (LangChain)]
+    User("👤 Tú") -->|"Escribes pregunta"| Frontend["🖥️ Interfaz (Next.js)"]
+    Frontend -->|"Envía mensaje"| Brain["🧠 El Cerebro (LangChain)"]
     
     subgraph Procesamiento
-        Brain -->|Decide buscar| Tool[📚 La Biblioteca (Arxiv)]
-        Tool -->|Devuelve documentos| Brain
-        Brain -->|Redacta respuesta| Brain
+        Brain -->|"Decide buscar"| Tool["📚 La Biblioteca (Arxiv)"]
+        Tool -->|"Devuelve documentos"| Brain
+        Brain -->|"Redacta respuesta"| Brain
     end
     
-    Brain -.->|Envía respuesta poco a poco (Streaming)| Frontend
-    Frontend -->|Guarda historia| Storage[💾 Memoria (Local Storage)]
+    Brain -.->|"Envía respuesta poco a poco (Streaming)"| Frontend
+    Frontend -->|"Guarda historia"| Storage["💾 Memoria (Local Storage)"]
     
-    style Frontend fill:#e1f5fe,stroke:#01579b
-    style Brain fill:#fff9c4,stroke:#fbc02d
-    style Tool fill:#e8f5e9,stroke:#2e7d32
-    style Storage fill:#f3e5f5,stroke:#7b1fa2
+    style Frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style Brain fill:#fff9c4,stroke:#fbc02d,stroke-width:2px
+    style Tool fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style Storage fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
 ```
