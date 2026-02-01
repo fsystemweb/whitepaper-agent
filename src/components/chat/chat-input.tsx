@@ -9,8 +9,9 @@
 
 import { useState, useCallback, useEffect, type KeyboardEvent, type FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
-import { Send, Loader2, Paperclip, Image, ChevronDown } from 'lucide-react';
+import { Send, Loader2, Paperclip, Image as ImageIcon, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface ChatInputProps {
     onSend: (message: string) => Promise<void>;
@@ -22,6 +23,7 @@ interface ChatInputProps {
 const MAX_CHARS = 1000;
 
 export function ChatInput({ onSend, isLoading, disabled, initialValue = '' }: ChatInputProps) {
+    const { t } = useTranslation('ChatInput');
     const [input, setInput] = useState(initialValue);
 
     // Sync with initialValue (for prompt card selection)
@@ -67,7 +69,7 @@ export function ChatInput({ onSend, isLoading, disabled, initialValue = '' }: Ch
                 value={input}
                 onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
                 onKeyDown={handleKeyDown}
-                placeholder={isLoading ? 'AI is responding...' : 'Ask whatever you want...'}
+                placeholder={isLoading ? t('placeholderLoading') : t('placeholderDefault')}
                 disabled={isDisabled}
                 rows={1}
                 className={cn(
@@ -124,7 +126,7 @@ export function ChatInput({ onSend, isLoading, disabled, initialValue = '' }: Ch
                             'bg-primary hover:bg-primary/90',
                             'disabled:opacity-50'
                         )}
-                        aria-label="Send message"
+                        aria-label={t('sendTooltip')}
                     >
                         {isLoading ? (
                             <Loader2 className="h-4 w-4 animate-spin" />

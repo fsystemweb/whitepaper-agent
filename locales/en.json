@@ -1,0 +1,51 @@
+{
+    "Sidebar": {
+        "newChat": "New chat",
+        "history": "History",
+        "guest": "Guest"
+    },
+    "WelcomeScreen": {
+        "greeting": "Hi",
+        "greetingSuffix": ",",
+        "titlePart1": "What would",
+        "titlePart2": "you like to know?",
+        "subtitle": "Use one of the most common prompts below or use your own to begin",
+        "defaultName": "there"
+    },
+    "PromptCards": {
+        "card1": {
+            "title": "AI Sentiment Classification studies",
+            "subtitle": "Support a business or research initiative",
+            "prompt": "Help me find the right whitepaper on AI Sentiment Classification analysis examples last 5 years"
+        },
+        "card2": {
+            "title": "Understand AI ethics fundamentals",
+            "subtitle": "Learn the key ethical challenges in AI",
+            "prompt": "I’m new to this topic, recommend a whitepaper about ethical issues in AI"
+        },
+        "card3": {
+            "title": "Healthcare AI strategies",
+            "subtitle": "Find practical and evidence-based guidance",
+            "prompt": "Help me find the right whitepaper on AI-driven healthcare optimization"
+        },
+        "card4": {
+            "title": "Explore Rugby and NFL concussion studies",
+            "subtitle": "Review scientific and medical findings",
+            "prompt": "Show me relevant whitepapers about sports related concussions like in the NFL and Rugby"
+        }
+    },
+    "ChatInput": {
+        "placeholderDefault": "Ask whatever you want...",
+        "placeholderLoading": "AI is responding...",
+        "sendTooltip": "Send message"
+    },
+    "MessageList": {
+        "clear": "Clear"
+    },
+    "Common": {
+        "language": "Language",
+        "spanish": "Spanish",
+        "english": "English",
+        "theme": "Theme"
+    }
+}
