@@ -7,8 +7,7 @@
  * Based on reference design with 4 cards and refresh button.
  */
 
-import { RefreshCw, FileText, Mail, FileSearch, Cpu } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { HeartPulse, Dumbbell, BotMessageSquare, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PromptCard {
@@ -21,32 +20,35 @@ interface PromptCard {
 
 const defaultPrompts: PromptCard[] = [
     {
-        id: 'todo',
-        title: 'I’m new to this topic recommend a whitepaper about',
-        subtitle: 'For personal learning or a specific task',
-        icon: <FileText className="h-5 w-5 text-primary" />,
-        prompt: 'I’m new to this topic recommend a whitepaper about',
+        id: 'sentiment-analysis',
+        title: 'AI Sentiment Classification studies',
+        subtitle: 'Support a business or research initiative',
+        prompt: 'Help me find the right whitepaper on AI Sentiment Classification analysis examples last 5 years',
+        icon: <BotMessageSquare className="h-5 w-5 text-primary" />,
     },
     {
-        id: 'summarize',
-        title: 'Help me find the right whitepaper',
-        subtitle: 'For a professional requirement',
-        icon: <Mail className="h-5 w-5 text-primary" />,
-        prompt: 'Help me find the right whitepaper',
+        id: 'ai-ethics',
+        title: 'Understand AI ethics fundamentals',
+        subtitle: 'Learn the key ethical challenges in AI',
+        prompt: 'I’m new to this topic, recommend a whitepaper about ethical issues in AI',
+
+        icon: <Scale className="h-5 w-5 text-primary" />,
+
     },
     {
-        id: 'search',
-        title: 'Show me relevant whitepapers about ',
-        subtitle: 'I’ll describe what I’m looking for in my own words',
-        icon: <FileSearch className="h-5 w-5 text-primary" />,
-        prompt: 'Show me relevant whitepapers about ',
+        id: 'healthcare-ai',
+        title: 'Healthcare AI strategies',
+        subtitle: 'Find practical and evidence-based guidance',
+        prompt: 'Help me find the right whitepaper on AI-driven healthcare optimization',
+        icon: <HeartPulse className="h-5 w-5 text-primary" />,
+
     },
     {
-        id: 'technical',
-        title: 'Recommend something based on my role',
-        subtitle: 'Tailored to my responsibilities and expertise',
-        icon: <Cpu className="h-5 w-5 text-primary" />,
-        prompt: 'Recommend something based on my role',
+        id: 'sports-concussions',
+        title: 'Explore Rugby and NFL concussion studies',
+        subtitle: 'Review scientific and medical findings',
+        prompt: 'Show me relevant whitepapers about sports-related concussions in the NFL and Rugby',
+        icon: <Dumbbell className="h-5 w-5 text-primary" />,
     },
 ];
 
