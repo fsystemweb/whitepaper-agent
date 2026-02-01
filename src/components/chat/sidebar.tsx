@@ -10,6 +10,7 @@
 import { Plus, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { BotMessageSquare } from 'lucide-react';
 
 interface SidebarProps {
     className?: string;
@@ -34,7 +35,9 @@ export function Sidebar({
             {/* Logo */}
             <div className="mb-6">
                 <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold text-sm">W</span>
+                    <span className="text-primary-foreground font-bold text-sm">
+                        <BotMessageSquare />
+                    </span>
                 </div>
             </div>
 

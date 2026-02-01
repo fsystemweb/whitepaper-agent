@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Chatbot | Modern Chat Interface",
-  description: "A modern chatbot application built with Next.js, shadcn/ui, and LangChain",
-  keywords: ["chatbot", "AI", "Next.js", "LangChain", "ChatGPT"],
+  title: "arXiv Whitepaper Finder | ChatGPT-Powered Research Assistant",
+  description: "An intelligent chatbot that searches, retrieves, and discusses academic whitepapers from arXiv using ChatGPT. Built with Next.js, shadcn/ui, and LangChain for seamless research workflows.",
+  keywords: ["arXiv", "whitepaper finder", "research assistant", "ChatGPT", "AI research", "academic search", "LangChain", "Next.js", "scientific papers", "machine learning"]
 };
 
 export default function RootLayout({

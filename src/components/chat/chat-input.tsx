@@ -102,8 +102,8 @@ export function ChatInput({ onSend, isLoading, disabled, initialValue = '' }: Ch
                             'transition-colors cursor-pointer'
                         )}
                     >
-                        AI Web
-                        <ChevronDown className="h-3 w-3" />
+                        <img src="/arXiv.png" alt="arXiv logo" width={20} height={20} />
+                        arXiv
                     </button>
 
                     {/* Character counter */}
