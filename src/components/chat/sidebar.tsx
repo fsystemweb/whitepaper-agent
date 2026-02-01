@@ -34,7 +34,7 @@ export function Sidebar({
         )}>
             {/* Logo */}
             <div className="mb-6">
-                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center" onClick={onNewChat}>
                     <span className="text-primary-foreground font-bold text-sm">
                         <BotMessageSquare />
                     </span>
