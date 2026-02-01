@@ -13,6 +13,7 @@ import { MessageBubble } from './message-bubble';
 import { TypingIndicator } from './typing-indicator';
 import { Trash2 } from 'lucide-react';
 import type { Message } from '@/hooks/use-chat';
+import { useTranslation } from 'react-i18next';
 
 interface MessageListProps {
     messages: Message[];
@@ -21,6 +22,7 @@ interface MessageListProps {
 }
 
 export function MessageList({ messages, isLoading, onClear }: MessageListProps) {
+    const { t } = useTranslation('MessageList');
     const scrollRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +45,7 @@ export function MessageList({ messages, isLoading, onClear }: MessageListProps) 
                         className="text-muted-foreground hover:text-destructive cursor-pointer"
                     >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        Clear
+                        {t('clear')}
                     </Button>
                 </div>
             )}

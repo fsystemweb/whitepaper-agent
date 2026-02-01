@@ -1,4 +1,5 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Sidebar - Minimal icon navigation
@@ -25,6 +26,7 @@ export function Sidebar({
     onToggleHistory,
     onNewChat,
 }: SidebarProps) {
+    const { t } = useTranslation('Sidebar');
     return (
         <aside className={cn(
             'fixed left-0 top-0 bottom-0 w-14 flex flex-col items-center py-4 z-50',
@@ -32,9 +34,9 @@ export function Sidebar({
             'hidden md:flex',
             className
         )}>
-            {/* Logo */}
+            {/* Navbar */}
             <div className="mb-6">
-                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center" onClick={onNewChat}>
+                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center" onClick={onNewChat} title={t('newChat')}>
                     <span className="text-primary-foreground font-bold text-sm">
                         <BotMessageSquare />
                     </span>
@@ -44,7 +46,7 @@ export function Sidebar({
             {/* New chat */}
             <IconButton
                 icon={<Plus className="h-5 w-5" />}
-                label="New chat"
+                label={t('newChat')}
                 onClick={onNewChat}
             />
 
@@ -55,7 +57,7 @@ export function Sidebar({
             <nav className="flex flex-col gap-1">
                 <IconButton
                     icon={<Clock className="h-5 w-5" />}
-                    label="History"
+                    label={t('history')}
                     active={isHistoryOpen}
                     onClick={onToggleHistory}
                 />
@@ -65,8 +67,8 @@ export function Sidebar({
             <div className="flex-1" />
 
             {/* User avatar */}
-            <Avatar className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all" title="Guest">
-                <AvatarImage src="" alt="Guest" />
+            <Avatar className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all" title={t('guest')}>
+                <AvatarImage src="" alt={t('guest')} />
                 <AvatarFallback className="bg-gradient-to-br from-violet-500 to-purple-600 text-white text-xs">
                     G
                 </AvatarFallback>

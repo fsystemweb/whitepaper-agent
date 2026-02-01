@@ -1,0 +1,51 @@
+{
+    "Sidebar": {
+        "newChat": "Nuevo Chat",
+        "history": "Historial",
+        "guest": "Invitado"
+    },
+    "WelcomeScreen": {
+        "greeting": "Hola",
+        "greetingSuffix": ",",
+        "titlePart1": "¿Qué te gustaría",
+        "titlePart2": "saber?",
+        "subtitle": "Usa una de las sugerencias a continuación o escribe la tuya para comenzar",
+        "defaultName": "ahí"
+    },
+    "PromptCards": {
+        "card1": {
+            "title": "Estudios de Clasificación de Sentimiento con IA",
+            "subtitle": "Apoya una iniciativa empresarial o de investigación",
+            "prompt": "Ayúdame a encontrar el whitepaper adecuado sobre ejemplos de análisis de Clasificación de Sentimiento con IA de los últimos 5 años"
+        },
+        "card2": {
+            "title": "Entender los fundamentos de la ética en la IA",
+            "subtitle": "Aprende los desafíos éticos clave en la IA",
+            "prompt": "Soy nuevo en este tema, recomiéndame un whitepaper sobre problemas éticos en la IA"
+        },
+        "card3": {
+            "title": "Estrategias de IA en la salud",
+            "subtitle": "Encuentra orientación práctica y basada en evidencia",
+            "prompt": "Ayúdame a encontrar el whitepaper adecuado sobre optimización de la salud impulsada por IA"
+        },
+        "card4": {
+            "title": "Explorar estudios de conmociones en Rugby y NFL",
+            "subtitle": "Revisar hallazgos científicos y médicos",
+            "prompt": "Muéstrame whitepapers relevantes sobre conmociones relacionadas con deportes como en la NFL y Rugby"
+        }
+    },
+    "ChatInput": {
+        "placeholderDefault": "Pregunta lo que quieras...",
+        "placeholderLoading": "La IA está respondiendo...",
+        "sendTooltip": "Enviar mensaje"
+    },
+    "MessageList": {
+        "clear": "Borrar"
+    },
+    "Common": {
+        "language": "Idioma",
+        "spanish": "Español",
+        "english": "Inglés",
+        "theme": "Tema"
+    }
+}

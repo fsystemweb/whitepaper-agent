@@ -7,6 +7,7 @@
  * Based on reference design with 4 cards and refresh button.
  */
 
+import { useTranslation } from 'react-i18next';
 import { HeartPulse, Dumbbell, BotMessageSquare, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -18,45 +19,44 @@ interface PromptCard {
     prompt: string;
 }
 
-const defaultPrompts: PromptCard[] = [
-    {
-        id: 'sentiment-analysis',
-        title: 'AI Sentiment Classification studies',
-        subtitle: 'Support a business or research initiative',
-        prompt: 'Help me find the right whitepaper on AI Sentiment Classification analysis examples last 5 years',
-        icon: <BotMessageSquare className="h-5 w-5 text-primary" />,
-    },
-    {
-        id: 'ai-ethics',
-        title: 'Understand AI ethics fundamentals',
-        subtitle: 'Learn the key ethical challenges in AI',
-        prompt: 'I’m new to this topic, recommend a whitepaper about ethical issues in AI',
-
-        icon: <Scale className="h-5 w-5 text-primary" />,
-
-    },
-    {
-        id: 'healthcare-ai',
-        title: 'Healthcare AI strategies',
-        subtitle: 'Find practical and evidence-based guidance',
-        prompt: 'Help me find the right whitepaper on AI-driven healthcare optimization',
-        icon: <HeartPulse className="h-5 w-5 text-primary" />,
-
-    },
-    {
-        id: 'sports',
-        title: 'Explore Rugby and NFL concussion studies',
-        subtitle: 'Review scientific and medical findings',
-        prompt: 'Show me relevant whitepapers about sports related concussions like in the NFL and Rugby',
-        icon: <Dumbbell className="h-5 w-5 text-primary" />,
-    },
-];
-
 interface PromptCardsProps {
     onSelectPrompt: (prompt: string) => void;
 }
 
 export function PromptCards({ onSelectPrompt }: PromptCardsProps) {
+    const { t } = useTranslation('PromptCards');
+
+    const defaultPrompts: PromptCard[] = [
+        {
+            id: 'sentiment-analysis',
+            title: t('card1.title'),
+            subtitle: t('card1.subtitle'),
+            prompt: t('card1.prompt'),
+            icon: <BotMessageSquare className="h-5 w-5 text-primary" />,
+        },
+        {
+            id: 'ai-ethics',
+            title: t('card2.title'),
+            subtitle: t('card2.subtitle'),
+            prompt: t('card2.prompt'),
+            icon: <Scale className="h-5 w-5 text-primary" />,
+        },
+        {
+            id: 'healthcare-ai',
+            title: t('card3.title'),
+            subtitle: t('card3.subtitle'),
+            prompt: t('card3.prompt'),
+            icon: <HeartPulse className="h-5 w-5 text-primary" />,
+        },
+        {
+            id: 'sports',
+            title: t('card4.title'),
+            subtitle: t('card4.subtitle'),
+            prompt: t('card4.prompt'),
+            icon: <Dumbbell className="h-5 w-5 text-primary" />,
+        },
+    ];
+
     return (
         <div className="space-y-4">
             {/* Prompt cards grid */}
