@@ -1,20 +1,29 @@
-# Modern AI Chatbot
+<div align="center">
+  <img src="public/android-chrome-512x512.png" alt="Whitepaper Agent Logo" width="120" />
+</div>
 
-A production-ready chatbot application built with Next.js 14, shadcn/ui, and LangChain integration.
+# Whitepaper Agent
 
-![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+A specialized AI agent designed to research and analyze whitepapers using Arxiv, built with Next.js 14, LangChain, and OpenAI.
+
+![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![LangChain](https://img.shields.io/badge/LangChain-🦜-green)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?logo=openai)
+
+## 📖 Documentation
+
+- **[Architecture Overview](docs/architecture.md)**: Understand how the "Brain" (LangChain), "Library" (Arxiv), and "interface" works together.
+- **[Challenges & Limitations](docs/desafios_y_limitaciones.md)**: Read about the technical challenges like language barriers (Spanish/English) and static knowledge bases.
 
 ## Features
 
-- 🚀 **Next.js 14** with App Router and Server Components
-- 💬 **Streaming responses** via Server-Sent Events (SSE)
-- 🎨 **shadcn/ui** components for a polished, accessible UI
-- 🤖 **LangChain** integration with ChatGPT API
-- 📝 **Decoupled prompts** - update prompts without touching code
-- ⌨️ **Full keyboard navigation** support
-- 📱 **Responsive design** for all screen sizes
+- 🧠 **Intelligent Research Agent**: Uses LangChain to reason about queries and decide when to fetch external data.
+- 📚 **Arxiv Integration**: Automatically searches and retrieves recent scientific papers to answer technical queries.
+- 💬 **Smart Context**: Maintains conversation history in Local Storage for a seamless experience.
+- 🚀 **Streaming Responses**: Real-time feedback using Server-Sent Events (SSE).
+- 🌐 **Language Bridge**: Seamlessly handles Spanish queries by finding relevant English papers and synthesizing answers back in Spanish.
+- 🎨 **Modern UI**: Polished interface with shadcn/ui and responsive design.
 
 ## Project Structure
 
@@ -119,8 +128,8 @@ Then use it in the ChatContainer:
 This project follows best practices from:
 
 - **[React Best Practices](https://vercel.com/blog)** - Parallel fetching, Suspense boundaries, memoization
-- **AI Product Patterns** - Streaming, prompt versioning, structured validation
-- **UI/UX Guidelines** - Touch targets, color contrast, loading states
+- **Agentic Patterns** - Tools integration, reasoning loops, prompt engineering
+- **UI/UX Guidelines** - Accessible components, clean typography, responsive layout
 
 ## Scripts
 
