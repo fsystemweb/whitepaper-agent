@@ -85,20 +85,28 @@ export async function* streamChatResponse(
 
     // Check if model requested a tool
     if (gathered && gathered.tool_calls && gathered.tool_calls.length > 0) {
-        const toolCall = gathered.tool_calls[0];
-
-        // Execute the tool
-        // We can yield a status update here if we want, but for now let's keep it text-only
-        const toolResult = await arxivTool.invoke(toolCall.args as { query: string });
+        // Execute all tools in parallel
+        const toolResults = await Promise.all(
+            gathered.tool_calls.map(async (toolCall) => {
+                const result = await arxivTool.invoke(toolCall.args as { query: string });
+                return {
+                    tool_call_id: toolCall.id!,
+                    content: typeof result === 'string' ? result : JSON.stringify(result),
+                };
+            })
+        );
 
         // Create updated conversation with tool result
         const nextMessages = [
             ...(Array.isArray(formattedPrompt) ? formattedPrompt : [new HumanMessage(userMessage)]),
             gathered,
-            new ToolMessage({
-                tool_call_id: toolCall.id!,
-                content: typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult),
-            }),
+            ...toolResults.map(
+                (res) =>
+                    new ToolMessage({
+                        tool_call_id: res.tool_call_id,
+                        content: res.content,
+                    })
+            ),
             new SystemMessage("Strictly use the links provided in the tool output. Do not change them.")
         ];
 
@@ -138,16 +146,27 @@ export async function generateChatResponse(
 
     // Handle Tool Call Logic
     if (response.tool_calls && response.tool_calls.length > 0) {
-        const toolCall = response.tool_calls[0];
-        const toolResult = await arxivTool.invoke(toolCall.args as { query: string });
+        // Execute all tools in parallel
+        const toolResults = await Promise.all(
+            response.tool_calls.map(async (toolCall) => {
+                const result = await arxivTool.invoke(toolCall.args as { query: string });
+                return {
+                    tool_call_id: toolCall.id!,
+                    content: typeof result === 'string' ? result : JSON.stringify(result),
+                };
+            })
+        );
 
         const nextMessages = [
             ...(Array.isArray(formattedPrompt) ? formattedPrompt : [new HumanMessage(userMessage)]),
             response,
-            new ToolMessage({
-                tool_call_id: toolCall.id!,
-                content: typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult),
-            })
+            ...toolResults.map(
+                (res) =>
+                    new ToolMessage({
+                        tool_call_id: res.tool_call_id,
+                        content: res.content,
+                    })
+            )
         ];
 
         const finalResponse = await modelWithTools.invoke(nextMessages);

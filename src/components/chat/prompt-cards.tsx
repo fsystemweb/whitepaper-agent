@@ -44,10 +44,10 @@ const defaultPrompts: PromptCard[] = [
 
     },
     {
-        id: 'sports-concussions',
+        id: 'sports',
         title: 'Explore Rugby and NFL concussion studies',
         subtitle: 'Review scientific and medical findings',
-        prompt: 'Show me relevant whitepapers about sports-related concussions in the NFL and Rugby',
+        prompt: 'Show me relevant whitepapers about sports related concussions like in the NFL and Rugby',
         icon: <Dumbbell className="h-5 w-5 text-primary" />,
     },
 ];

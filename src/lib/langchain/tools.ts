@@ -22,7 +22,13 @@ export const arxivTool = tool(
             getFullDocuments: false,
         });
 
-        const docs = await retriever.invoke(query);
+        let docs;
+        try {
+            docs = await retriever.invoke(query);
+        } catch (error) {
+            console.error("Error retrieving documents from arXiv:", error);
+            return "Failed to retrieve documents from arXiv using the query: " + query;
+        }
 
         if (config.features.enableRelevanceCheck) {
             const chatModel = getChatModel();
