@@ -101,7 +101,7 @@ export function ChatContainer({ systemPromptKey = 'default' }: ChatContainerProp
             />
 
             {/* Main content */}
-            <div className="flex-1 flex flex-col md:ml-14">
+            <div className="flex-1 flex flex-col md:ml-14 overflow-hidden">
                 {/* Error message */}
                 {error && (
                     <div className="mx-4 mt-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm flex items-center gap-2">

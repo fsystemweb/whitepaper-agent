@@ -49,7 +49,7 @@ export function MessageList({ messages, isLoading, onClear }: MessageListProps) 
             )}
 
             {/* Messages */}
-            <ScrollArea className="flex-1" ref={containerRef}>
+            <ScrollArea className="flex-1 min-h-0" ref={containerRef}>
                 <div className="max-w-3xl mx-auto py-4 px-4 space-y-1">
                     {messages.map((message, index) => {
                         const isLastMessage = index === messages.length - 1;
