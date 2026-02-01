@@ -74,16 +74,15 @@ ONLY return the JSON.`;
             return formatDocsToString(filteredDocs);
         }
 
-        console.log("arvix", docs);
         return formatDocsToString(docs);
     },
     {
         name: "search_arxiv",
         description:
-            "Searches arXiv.org for scientific papers. Useful for finding technical whitepapers, authors, and summaries.",
+            "Searches arXiv.org for scientific papers. Useful for finding technical whitepapers, authors, and summaries. NOTE: This tool expects queries in English.",
         schema: z.object({
             query: z.string().describe(
-                "The search query, e.g., 'Large Language Models' or 'Quantum Computing'"
+                "The search query in English, e.g., 'Large Language Models' or 'Quantum Computing'"
             ),
         }),
     }
