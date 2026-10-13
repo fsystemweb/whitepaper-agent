@@ -13,9 +13,17 @@ let chatModelInstance: ChatOpenAI | null = null;
  * Newer OpenAI models reject `max_tokens` and require `max_completion_tokens`.
  * LangChain only switches automatically for models it knows about (o*, gpt-5),
  * so we always send `max_completion_tokens` ourselves via modelKwargs.
+ *
+ * Reasoning is turned off: it isn't supported together with function tools on
+ * /v1/chat/completions, and it avoids paying for reasoning tokens.
  */
-function tokenLimitKwargs(maxTokens: number) {
-    return { modelKwargs: { max_completion_tokens: maxTokens } };
+function requestKwargs(maxTokens: number) {
+    return {
+        modelKwargs: {
+            max_completion_tokens: maxTokens,
+            reasoning_effort: 'none',
+        },
+    };
 }
 
 /**
@@ -30,7 +38,7 @@ export function getChatModel(): ChatOpenAI {
             openAIApiKey: config.openai.apiKey,
             modelName: config.openai.model,
             temperature: config.openai.temperature,
-            ...tokenLimitKwargs(config.openai.maxTokens),
+            ...requestKwargs(config.openai.maxTokens),
             streaming: true,
         });
     }
@@ -53,7 +61,7 @@ export function createChatModel(options: {
         openAIApiKey: config.openai.apiKey,
         modelName: options.model || config.openai.model,
         temperature: options.temperature ?? config.openai.temperature,
-        ...tokenLimitKwargs(options.maxTokens || config.openai.maxTokens),
+        ...requestKwargs(options.maxTokens || config.openai.maxTokens),
         streaming: true,
     });
 }
