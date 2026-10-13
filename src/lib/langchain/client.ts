@@ -10,6 +10,15 @@ import { config, validateConfig } from '@/lib/config';
 let chatModelInstance: ChatOpenAI | null = null;
 
 /**
+ * Newer OpenAI models reject `max_tokens` and require `max_completion_tokens`.
+ * LangChain only switches automatically for models it knows about (o*, gpt-5),
+ * so we always send `max_completion_tokens` ourselves via modelKwargs.
+ */
+function tokenLimitKwargs(maxTokens: number) {
+    return { modelKwargs: { max_completion_tokens: maxTokens } };
+}
+
+/**
  * Get the ChatOpenAI client instance (singleton pattern)
  * Reuses the same instance across requests for efficiency
  */
@@ -21,7 +30,7 @@ export function getChatModel(): ChatOpenAI {
             openAIApiKey: config.openai.apiKey,
             modelName: config.openai.model,
             temperature: config.openai.temperature,
-            maxTokens: config.openai.maxTokens,
+            ...tokenLimitKwargs(config.openai.maxTokens),
             streaming: true,
         });
     }
@@ -44,7 +53,7 @@ export function createChatModel(options: {
         openAIApiKey: config.openai.apiKey,
         modelName: options.model || config.openai.model,
         temperature: options.temperature ?? config.openai.temperature,
-        maxTokens: options.maxTokens || config.openai.maxTokens,
+        ...tokenLimitKwargs(options.maxTokens || config.openai.maxTokens),
         streaming: true,
     });
 }

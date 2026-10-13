@@ -98,7 +98,7 @@ src/
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `OPENAI_API_KEY` | Your OpenAI API key | Required |
-| `OPENAI_MODEL` | Model to use | `gpt-4o` |
+| `OPENAI_MODEL` | Model to use | `gpt-6-luna` |
 | `OPENAI_TEMPERATURE` | Response creativity (0-1) | `0.2` |
 | `OPENAI_MAX_TOKENS` | Maximum response length | `2048` |
 
