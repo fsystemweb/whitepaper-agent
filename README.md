@@ -11,6 +11,18 @@ A specialized AI agent designed to research and analyze whitepapers using Arxiv,
 ![LangChain](https://img.shields.io/badge/LangChain-🦜-green)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?logo=openai)
 
+## 🎬 Live Demo
+
+**Try it now: [whitepaper-agent.vercel.app](https://whitepaper-agent.vercel.app/)**
+
+![Whitepaper Agent demo](docs/demo/demo.gif)
+
+Pick a suggested topic (or type your own question), and the agent searches Arxiv and answers with the title, authors, publication date, a short summary and a link to the paper. The query below was written in Spanish and the agent found an English paper and answered in Spanish.
+
+| Home | Answer |
+| :---: | :---: |
+| ![Home screen with suggested topics](docs/demo/home.png) | ![Agent answer with paper details](docs/demo/response.png) |
+
 ## 📖 Documentation
 
 - **[Architecture Overview](docs/architecture.md)**: Understand how the "Brain" (LangChain), "Library" (Arxiv), and "interface" works together.
